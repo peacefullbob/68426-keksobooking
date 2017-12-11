@@ -1,28 +1,37 @@
 'use strict';
 
 function getRandom(min, max) {
-  return Math.floor(min + Math.random() * max);
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
+var fragment = document.createDocumentFragment();
+var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var types = ['flat', 'house', 'bungalo'];
 var chekins = ['12:00', '13:00', '14:00'];
 var checkouts = ['12:00', '13:00', '14:00'];
 var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var avas = [1, 2, 3, 4, 5, 6, 7, 8];
 
-function getNoRepeatTitle() {
-  var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-  var titlesElem = titles[getRandom(1, titles.length)];
-  titles.splice(titlesElem - 1, 1);
-  return titles[titlesElem];
+function getShuffleArray(array) {
+  return array.slice().sort(function () {
+    return Math.random() - 0.5;
+  });
 }
 
-function getNoRepeatNumber() {
-  var avas = [1, 2, 3, 4, 5, 6, 7, 8];
-  var avasElem = avas[getRandom(1, avas.length)];
-  avas = avas.filter(function (number) {
-    return number !== avasElem;
+function getNoRepeatNumber(array) {
+  var arrayElem = getShuffleArray(array)[getRandom(1, getShuffleArray(array).length)];
+  avas = getShuffleArray(array).filter(function (number) {
+    return number !== arrayElem;
   });
-  return avasElem;
+  return arrayElem;
+}
+
+function getNoRepeatTitle(array) {
+  var arrayElem = getShuffleArray(array)[getRandom(1, getShuffleArray(array).length)];
+  titles = getShuffleArray(array).filter(function (number) {
+    return number !== arrayElem;
+  });
+  return arrayElem;
 }
 
 function getRandomLengthArray(array) {
@@ -52,7 +61,7 @@ function getPoints() {
             y: getRandom(100, 500)
           },
           offer: {
-            title: getNoRepeatTitle(),
+            title: getNoRepeatTitle(titles),
             price: getRandom(999, 100001),
             type: types[getRandom(0, types.length)],
             rooms: getRandom(1, 6),
@@ -64,7 +73,7 @@ function getPoints() {
             photos: []
           },
           author: {
-            avatar: 'img/avatars/user' + '0' + getNoRepeatNumber() + '.png'
+            avatar: 'img/avatars/user' + '0' + getNoRepeatNumber(avas) + '.png'
           }
         });
   }
@@ -100,7 +109,6 @@ function renderPopup(point) {
   return pointElement;
 }
 
-var fragment = document.createDocumentFragment();
 for (var k = 0; k < points.length; k++) {
   fragment.appendChild(renderPins(points[k]));
 }
