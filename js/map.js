@@ -173,3 +173,60 @@ pin.addEventListener('click', function () {
     });
   });
 });
+
+
+var selectToSync = document.querySelector('#timein');
+selectToSync.addEventListener('change', function syncTime() {
+  document.getElementById(selectToSync.dataset.syncwith).options[selectToSync.selectedIndex].selected = true;
+});
+
+var selectToSync2 = document.querySelector('#timeout');
+selectToSync2.addEventListener('change', function syncTime() {
+  document.getElementById(selectToSync2.dataset.syncwith).options[selectToSync2.selectedIndex].selected = true;
+});
+
+var elementPrice = document.querySelector('#type');
+elementPrice.addEventListener('change', function syncPrice() {
+  var el = elementPrice;
+  var price = document.querySelector('#price');
+  if (el.value === 'bungalo') {
+    price.value = '0';
+  } else if (el.value === 'flat') {
+    price.value = '1000';
+  } else if (el.value === 'house') {
+    price.value = '5000';
+  } else if (el.value === 'palace') {
+    price.value = '10000';
+  }
+});
+
+var elementGuests = document.querySelector('#room_number');
+elementGuests.addEventListener('change', function syncGuests() {
+  var el = elementGuests;
+  var guests = document.querySelector('#capacity');
+  function removeChilds() {
+    while (guests.lastChild) {
+      guests.removeChild(guests.lastChild);
+    }
+  }
+  var rooms1 = new Option('для 1 гостя', '1');
+  var rooms2 = new Option('для 2 гостей', '2');
+  var rooms3 = new Option('для 3 гостей', '3');
+  var rooms100 = new Option('не для гостей', '0');
+  if (el.value === '1') {
+    removeChilds();
+    guests.appendChild(rooms1);
+  } else if (el.value === '2') {
+    removeChilds();
+    guests.appendChild(rooms1);
+    guests.appendChild(rooms2);
+  } else if (el.value === '3') {
+    removeChilds();
+    guests.appendChild(rooms1);
+    guests.appendChild(rooms2);
+    guests.appendChild(rooms3);
+  } else if (el.value === '100') {
+    removeChilds();
+    guests.appendChild(rooms100);
+  }
+});
