@@ -23,11 +23,18 @@ function getRandomLengthArray(array) {
 function getFeaturesFragment(array) {
   var fragment = document.createDocumentFragment();
   array.forEach(function (element) {
-    var li = document.createElement('li', {className: 'feature feature--' + element});
+    var li = document.createElement('li');
+    li.className = 'feature feature--' + element;
     fragment.append(li);
   });
-
+  console.log(fragment);
   return fragment;
+}
+
+function removeChildren(elem) {
+  while (elem.lastChild) {
+    elem.removeChild(elem.lastChild);
+  }
 }
 
 function getPoints() {
@@ -96,7 +103,8 @@ function renderPopup(point) {
   pointElement.querySelector('p:nth-of-type(3)').textContent = point.offer.rooms + ' комнаты для ' + point.offer.guests + ' гостей';
   pointElement.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + point.offer.checkin + ', выезд до ' + point.offer.checkout;
   pointElement.style.top = point.location.y;
-  pointElement.querySelector('.popup__features').append(getFeaturesFragment(point.offer.features));
+  removeChildren(pointElement.querySelector('.popup__features'));
+  pointElement.querySelector('.popup__features').appendChild(getFeaturesFragment(point.offer.features));
   pointElement.querySelector('p:nth-of-type(5)').textContent = point.offer.description;
   pointElement.querySelector('.popup__avatar').src = point.author.avatar;
   pointElement.querySelector('.popup__pictures img').src = point.author.avatar;
@@ -172,8 +180,7 @@ pin.addEventListener('click', function () {
         map.querySelector('button.map__pin--active').classList.remove('map__pin--active');
       }
       item.classList.add('map__pin--active');
-      findById(item);
-      var indexElement = findById();
+      var indexElement = findById(item);
       getPopupNode(points[indexElement]);
     });
   });
