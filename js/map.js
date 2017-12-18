@@ -19,18 +19,20 @@ function getRandomLengthArray(array) {
   }
   return randFeatures;
 }
-function getList() {
-  var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  var randFeatures = getRandomLengthArray(features);
-  var list = [];
-  for (var i = 0; i < getRandom(1, randFeatures.length); i++) {
-    list.push(randFeatures[i]);
-  }
-  return list;
+
+function getFeaturesFragment(array) {
+  var fragment = document.createDocumentFragment();
+  array.forEach(function (element) {
+    var li = document.createElement('li', {className: 'feature feature--' + element});
+    fragment.append(li);
+  });
+
+  return fragment;
 }
 
 function getPoints() {
   var points = [];
+  var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
   var houses = {
     flat: 'Квартира',
@@ -58,7 +60,7 @@ function getPoints() {
         guests: getRandom(1, 1000),
         checkin: chekins[getRandom(0, chekins.length)],
         checkout: checkouts[getRandom(0, checkouts.length)],
-        features: getList(),
+        features: getRandomLengthArray(features),
         description: '',
         photos: [],
         id: shuffleId.pop()
@@ -94,7 +96,7 @@ function renderPopup(point) {
   pointElement.querySelector('p:nth-of-type(3)').textContent = point.offer.rooms + ' комнаты для ' + point.offer.guests + ' гостей';
   pointElement.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + point.offer.checkin + ', выезд до ' + point.offer.checkout;
   pointElement.style.top = point.location.y;
-  pointElement.querySelector('.popup__features').innerHTML = point.offer.features;
+  pointElement.querySelector('.popup__features').append(getFeaturesFragment(point.offer.features));
   pointElement.querySelector('p:nth-of-type(5)').textContent = point.offer.description;
   pointElement.querySelector('.popup__avatar').src = point.author.avatar;
   pointElement.querySelector('.popup__pictures img').src = point.author.avatar;
@@ -154,6 +156,14 @@ mapPinMain.addEventListener('click', function startMapUse() {
     item.disabled = false;
   });
 });
+function findById(element) {
+  for (var i = 0; i < points.length; i++) {
+    if (points[i].offer.id === +element.dataset.id) {
+      var indexElement = i;
+    }
+  }
+  return indexElement;
+}
 pin.addEventListener('click', function () {
   var mapPins = Array.prototype.slice.call(map.querySelectorAll('.map__pin:not(.map__pin--main)'));
   mapPins.forEach(function (item) {
@@ -162,14 +172,7 @@ pin.addEventListener('click', function () {
         map.querySelector('button.map__pin--active').classList.remove('map__pin--active');
       }
       item.classList.add('map__pin--active');
-      function findById() {
-        for (var i = 0; i < points.length; i++) {
-          if (points[i].offer.id === +item.dataset.id) {
-            var indexElement = i;
-          }
-        }
-        return indexElement;
-      }
+      findById(item);
       var indexElement = findById();
       getPopupNode(points[indexElement]);
     });
