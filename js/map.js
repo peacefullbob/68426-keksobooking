@@ -27,7 +27,6 @@ function getFeaturesFragment(array) {
     li.className = 'feature feature--' + element;
     fragment.append(li);
   });
-  console.log(fragment);
   return fragment;
 }
 
