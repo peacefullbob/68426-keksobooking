@@ -174,7 +174,6 @@ pin.addEventListener('click', function () {
   });
 });
 
-
 var selectToSync = document.querySelector('#timein');
 selectToSync.addEventListener('change', function syncTime() {
   document.getElementById(selectToSync.dataset.syncwith).options[selectToSync.selectedIndex].selected = true;
