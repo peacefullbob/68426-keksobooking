@@ -215,7 +215,6 @@ elementPrice.addEventListener('change', function syncPrice() {
 
 var elementGuests = document.querySelector('#room_number');
 elementGuests.addEventListener('change', function syncGuests() {
-  var el = elementGuests;
   var guests = document.querySelector('#capacity');
   function removeChilds() {
     while (guests.lastChild) {
