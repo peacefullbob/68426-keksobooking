@@ -44,40 +44,53 @@
     });
   });
 
-  var mapPin = document.querySelector('.map__pin');
+  var mapPin = document.querySelector('.map__pin--main');
+  mapPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
 
-  mapPin.onmousedown = function (e) { // 1. отследить нажатие
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
 
-    // подготовить к перемещению
-    // 2. разместить на том же месте, но в абсолютных координатах
-    moveAt(e);
-    // переместим в body, чтобы мяч был точно не внутри position:relative
-    document.body.appendChild(mapPin);
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
 
-    mapPin.style.zIndex = 1000; // показывать мяч над другими элементами
+      mapPin.style.top = (mapPin.offsetTop - shift.y) + 'px';
+      mapPin.style.left = (mapPin.offsetLeft - shift.x) + 'px';
 
-    // передвинуть мяч под координаты курсора
-    // и сдвинуть на половину ширины/высоты для центрирования
-    function moveAt(e) {
-      mapPin.style.left = e.pageX - mapPin.offsetWidth / 2 + 'px';
-      mapPin.style.top = e.pageY - mapPin.offsetHeight / 2 + 'px';
-    }
+      if (mapPin.offsetTop - shift.y > 650) {
+        mapPin.style.top = 650 + 'px';
+      }
+      if (mapPin.offsetTop - shift.y < 100) {
+        mapPin.style.top = 100 + 'px';
+      }
+      if (mapPin.offsetLeft - shift.x > 1200) {
+        mapPin.style.left = 1200 + 'px';
+      }
+      if (mapPin.offsetLeft - shift.x < 0) {
+        mapPin.style.left = 0 + 'px';
+      }
 
-    // 3, перемещать по экрану
-    document.onmousemove = function (e) {
-      moveAt(e);
+      document.querySelector('#address').value = mapPin.style.left + ' ' + mapPin.style.top;
     };
 
-    // 4. отследить окончание переноса
-    mapPin.onmouseup = function () {
-      document.onmousemove = null;
-      mapPin.onmouseup = null;
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
     };
 
-    mapPin.ondragstart = function () {
-      return false;
-    };
-
-    document.querySelector('#address').value = mapPin.style.left + ' ' +  mapPin.style.top;
-  };
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 })();
