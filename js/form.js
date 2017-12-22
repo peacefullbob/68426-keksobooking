@@ -1,66 +1,71 @@
 'use strict';
 (function () {
-  var selectToSync = document.querySelector('#timein');
-  selectToSync.addEventListener('change', function syncTime() {
-    document.getElementById(selectToSync.dataset.syncwith).options[selectToSync.selectedIndex].selected = true;
-  });
-
-  var selectToSync2 = document.querySelector('#timeout');
-  selectToSync2.addEventListener('change', function syncTime() {
-    document.getElementById(selectToSync2.dataset.syncwith).options[selectToSync2.selectedIndex].selected = true;
-  });
 
   var elementPrice = document.querySelector('#type');
-  elementPrice.addEventListener('change', function syncPrice() {
-    var price = document.querySelector('#price');
-    switch (elementPrice.value) {
-      case 'bungalo':
-        price.value = '0';
+  var price = document.querySelector('#price');
+  var selectToSync = document.querySelector('#timein');
+  var selectToSync2 = document.querySelector('#timeout');
+  var elementGuests = document.querySelector('#room_number');
+  var guests = document.querySelector('#capacity');
+  var rooms1 = new Option('для 1 гостя', '1');
+  var rooms2 = new Option('для 2 гостей', '2');
+  var rooms3 = new Option('для 3 гостей', '3');
+  var rooms100 = new Option('не для гостей', '0');
+  function syncValue(element1, array1, element2, array2) {
+    switch (element1.value) {
+      case array1[0]:
+        element2.value = array2[0];
         break;
-      case 'flat':
-        price.value = '1000';
+      case array1[1]:
+        element2.value = array2[1];
         break;
-      case 'house':
-        price.value = '5000';
+      case array1[2]:
+        element2.value = array2[2];
         break;
-      case 'palace':
-        price.value = '10000';
+      case array1[3]:
+        element2.value = array2[3];
         break;
     }
-  });
-
-  var elementGuests = document.querySelector('#room_number');
-  elementGuests.addEventListener('change', function syncGuests() {
-    var guests = document.querySelector('#capacity');
+  }
+  function syncGuests(element1, array1, element2, array2) {
     function removeChilds() {
-      while (guests.lastChild) {
-        guests.removeChild(guests.lastChild);
+      while (element2.lastChild) {
+        element2.removeChild(element2.lastChild);
       }
     }
-    var rooms1 = new Option('для 1 гостя', '1');
-    var rooms2 = new Option('для 2 гостей', '2');
-    var rooms3 = new Option('для 3 гостей', '3');
-    var rooms100 = new Option('не для гостей', '0');
-    switch (elementGuests.value) {
-      case '1':
+    switch (element1.value) {
+      case array1[0]:
         removeChilds();
-        guests.appendChild(rooms1);
+        element2.appendChild(array2[0]);
         break;
-      case '2':
+      case array1[1]:
         removeChilds();
-        guests.appendChild(rooms1);
-        guests.appendChild(rooms2);
+        element2.appendChild(array2[0]);
+        element2.appendChild(array2[1]);
         break;
-      case '3':
+      case array1[2]:
         removeChilds();
-        guests.appendChild(rooms1);
-        guests.appendChild(rooms2);
-        guests.appendChild(rooms3);
+        element2.appendChild(array2[0]);
+        element2.appendChild(array2[1]);
+        element2.appendChild(array2[2]);
         break;
-      case '100':
+      case array1[3]:
         removeChilds();
-        guests.appendChild(rooms100);
+        element2.appendChild(array2[3]);
         break;
     }
+  }
+
+  selectToSync.addEventListener('change', function () {
+    window.synchronizeFields(selectToSync, ['12:00', '13:00', '14:00'], selectToSync2, ['12:00', '13:00', '14:00'], syncValue);
+  });
+  selectToSync2.addEventListener('change', function () {
+    window.synchronizeFields(selectToSync2, ['12:00', '13:00', '14:00'], selectToSync, ['12:00', '13:00', '14:00'], syncValue);
+  });
+  elementPrice.addEventListener('change', function () {
+    window.synchronizeFields(elementPrice, ['flat', 'bungalo', 'house', 'palace'], price, ['1000', '0', '5000', '10000'], syncValue);
+  });
+  elementGuests.addEventListener('change', function () {
+    window.synchronizeFields(elementGuests, ['1', '2', '3', '100'], guests, [rooms1, rooms2, rooms3, rooms100], syncGuests);
   });
 })();
