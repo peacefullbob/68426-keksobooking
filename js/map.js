@@ -28,7 +28,6 @@ window.map = (function () {
     });
   });
 
-<<<<<<< HEAD
   pin.addEventListener('click', function () {
     var mapPins = Array.prototype.slice.call(map.querySelectorAll('.map__pin:not(.map__pin--main)'));
     mapPins.forEach(function (item) {
@@ -52,6 +51,8 @@ window.map = (function () {
     };
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
+
+      mapPin.style.zIndex = 1000;
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
