@@ -20,8 +20,8 @@ window.map = (function () {
         map.querySelector('button.map__pin--active').classList.remove('map__pin--active');
       }
       map.querySelector('.map__pin').classList.add('map__pin--active');
-      var indexElement = window.data.findById(window.data.points(), map.querySelector('.map__pin'));
-      window.card.getPopupNode(window.data.points()[indexElement]);
+      var indexElement = window.data.findById(window.data.getPoints(), map.querySelector('.map__pin'));
+      window.card.getPopupNode(window.data.getPoints()[indexElement]);
     });
     formInputs.forEach(function (item) {
       item.disabled = false;
