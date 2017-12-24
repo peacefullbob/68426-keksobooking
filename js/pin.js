@@ -17,6 +17,17 @@ window.pin = (function () {
       fragment.appendChild(window.pin.renderPins(window.data.getPoints()[i]));
     }
     similarListPins.appendChild(fragment);
+    var mapPins = Array.prototype.slice.call(document.querySelectorAll('.map__pin:not(.map__pin--main)'));
+    mapPins.forEach(function (item) {
+      item.addEventListener('click', function () {
+        if (similarListPins.querySelector('button.map__pin--active')) {
+          similarListPins.querySelector('button.map__pin--active').classList.remove('map__pin--active');
+        }
+        item.classList.add('map__pin--active');
+        var indexElement = window.data.findById(window.data.getPoints(), item);
+        window.card.getPopupNode(window.data.getPoints()[indexElement]);
+      });
+    });
   }
   return {
     renderPins: renderPins,
