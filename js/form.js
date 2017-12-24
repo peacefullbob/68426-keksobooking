@@ -1,4 +1,5 @@
 'use strict';
+
 window.form = (function () {
   var selectToSync = document.querySelector('#timein');
   selectToSync.addEventListener('change', function syncTime() {
