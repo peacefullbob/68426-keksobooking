@@ -1,5 +1,6 @@
 'use strict';
-(function () {
+
+window.form = (function () {
   var selectToSync = document.querySelector('#timein');
   selectToSync.addEventListener('change', function syncTime() {
     document.getElementById(selectToSync.dataset.syncwith).options[selectToSync.selectedIndex].selected = true;

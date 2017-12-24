@@ -1,8 +1,9 @@
 'use strict';
-(function () {
+
+window.card = (function () {
   var ESC_KEYCODE = 27;
   var map = document.querySelector('.map');
-  window.card = {
+  return {
     renderPopup: function (point) {
       var similarPopupTemplate = document.querySelector('template').content.querySelector('article.map__card');
       var pointElement = similarPopupTemplate.cloneNode(true);
@@ -20,7 +21,6 @@
       pointElement.querySelector('.popup__pictures img').src = point.author.avatar;
       return pointElement;
     },
-
     getPopupNode: function (numberElement) {
       var fragment = document.createDocumentFragment();
       fragment.appendChild(window.card.renderPopup(numberElement));
