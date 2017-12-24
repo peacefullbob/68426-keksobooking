@@ -1,16 +1,10 @@
 'use strict';
-(function () {
-  window.data = {
+
+window.data = (function () {
+  return {
     getRandom: function (min, max) {
       return Math.floor(Math.random() * (max - min)) + min;
     },
-
-    getShuffleArray: function (array) {
-      return array.slice().sort(function () {
-        return Math.random() - 0.5;
-      });
-    },
-
     getRandomLengthArray: function (array) {
       var randFeatures = [];
       for (var i = 0; i < window.data.getRandom(1, array.length); i++) {
@@ -18,14 +12,12 @@
       }
       return randFeatures;
     },
-
     removeChildren: function (elem) {
       while (elem.lastChild) {
         elem.removeChild(elem.lastChild);
       }
     },
-
-    getPoints: function () {
+    points: function () {
       var points = [];
       var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
       var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
@@ -35,12 +27,10 @@
         bungalo: 'Бунгало'
       };
       var types = [houses.flat, houses.house, houses.bungalo];
-      var chekins = ['12:00', '13:00', '14:00'];
+      var checkins = ['12:00', '13:00', '14:00'];
       var checkouts = ['12:00', '13:00', '14:00'];
       var numbers = [1, 2, 3, 4, 5, 6, 7, 8];
-      var shuffleTitles = window.data.getShuffleArray(titles);
-      var shuffleAvas = window.data.getShuffleArray(numbers);
-      var shuffleId = window.data.getShuffleArray(numbers);
+      var ids = [1, 2, 3, 4, 5, 6, 7, 8];
       for (var i = 0; i < 8; i++) {
         points.push({
           location: {
@@ -48,26 +38,25 @@
             y: window.data.getRandom(100, 500)
           },
           offer: {
-            title: shuffleTitles.pop(),
+            title: titles.pop(),
             price: window.data.getRandom(999, 100001),
             type: types[window.data.getRandom(0, types.length)],
             rooms: window.data.getRandom(1, 6),
             guests: window.data.getRandom(1, 1000),
-            checkin: chekins[window.data.getRandom(0, chekins.length)],
+            checkin: checkins[window.data.getRandom(0, checkins.length)],
             checkout: checkouts[window.data.getRandom(0, checkouts.length)],
             features: window.data.getRandomLengthArray(features),
             description: '',
             photos: [],
-            id: shuffleId.pop()
+            id: ids.pop()
           },
           author: {
-            avatar: 'img/avatars/user' + '0' + shuffleAvas.pop() + '.png'
+            avatar: 'img/avatars/user' + '0' + numbers.pop() + '.png'
           }
         });
       }
       return points;
     },
-
     getFeaturesFragment: function (array) {
       var fragment = document.createDocumentFragment();
       array.forEach(function (element) {
@@ -77,7 +66,6 @@
       });
       return fragment;
     },
-
     findById: function (array, element) {
       for (var i = 0; i < array.length; i++) {
         if (array[i].offer.id === +element.dataset.id) {
@@ -87,5 +75,4 @@
       return indexElement;
     }
   };
-  window.points = window.data.getPoints();
 })();
