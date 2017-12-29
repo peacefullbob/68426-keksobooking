@@ -3,20 +3,22 @@
 window.map = (function () {
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
-
+  window.pin.getPinNode();
   mapPinMain.removeAttribute('hidden');
-  mapPinMain.addEventListener('click', function firstClick() {
+  mapPinMain.addEventListener('click', function startMapUse() {
+
     var noticeForm = document.querySelector('.notice__form');
     var formInputs = Array.prototype.slice.call(noticeForm.querySelectorAll('fieldset'));
-
     map.classList.remove('map--faded');
     map.classList.remove('map--active');
     noticeForm.classList.remove('notice__form--disabled');
-    window.pin.getPinNode();
+    var mapPins = Array.prototype.slice.call(map.querySelectorAll('.map__pin:not(.map__pin--main)'));
+    mapPins.forEach(function (item) {
+      item.hidden = false;
+    });
     formInputs.forEach(function (item) {
       item.disabled = false;
     });
-    mapPinMain.removeEventListener('click', firstClick);
   });
 
   var mapPin = document.querySelector('.map__pin--main');
@@ -28,8 +30,6 @@ window.map = (function () {
     };
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-
-      mapPin.style.zIndex = 1000;
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -70,15 +70,14 @@ window.map = (function () {
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-  function closePopup() {
-    var popup = document.querySelector('.popup');
-    var activePin = map.querySelector('button.map__pin--active');
-    if (popup && activePin) {
-      map.removeChild(popup);
-      activePin.classList.remove('map__pin--active');
-    }
-  }
   return {
-    closePopup: closePopup
+    closePopup: function () {
+      var popup = document.querySelector('.popup');
+      var activePin = map.querySelector('button.map__pin--active');
+      if (popup && activePin) {
+        map.removeChild(popup);
+        activePin.classList.remove('map__pin--active');
+      }
+    }
   };
 })();
