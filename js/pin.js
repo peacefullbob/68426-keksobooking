@@ -15,11 +15,11 @@ window.pin = (function () {
       window.backend.load(function (points) {
         var similarListPins = document.querySelector('.map__pins');
         var fragment = document.createDocumentFragment();
-        for (var i = 0; i < points.length; i++) {
+        var takeNumber = points.length > 5 ? 5 : points.length;
+        for (var i = 0; i < takeNumber; i++) {
           fragment.appendChild(window.pin.renderPins(points[i]));
         }
         similarListPins.appendChild(fragment);
-        window.points = points;
       });
     }
   };
